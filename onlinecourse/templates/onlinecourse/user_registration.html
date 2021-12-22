@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--Here we used maxcdn CDN (Content Distribution Network)
+    for delivering bootstrap.min.css file to our templates. -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    {% load static %}
+</head>
+<body>
+
+<!-- Add a Navigation bar -->
+<nav class="navbar navbar-light bg-light">
+    <div class='container-fluid'>
+        <div clss='navbar-header'>
+            <a class='navbar-brand' href="{% url 'onlinecourse:popular_course_list' %}">Online Course</a>
+         </div>
+        <ul class="nav navbar-nav navbar-right">
+        {% if user.is_authenticated %}
+            <li>
+                <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
+                <a class="btn btn-link" href="{% url 'onlinecourse:logout' %}">Logout</a>
+            </li>
+            {% else %}
+            <li>
+                <form class="form-inline" action="{% url 'onlinecourse:login' %}" method="post">
+            {% csrf_token %}
+                    <div class="input-group">
+                        <input type="text" placeholder="Username" name="username" class="form-control">
+                        <input type="password" placeholder="Username" name="psw" class="form-control">
+                        <button type="submit" class="btn btn-primary">Login</button>
+                        <a href="{% url 'onlinecourse:registration' %}" class="btn btn-link">Sign Up</a>
+                    </div>
+                </form>
+            </li>
+             {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<!-- Stylize Registration form -->
+<form action="{% url 'onlinecourse:registration' %}" method="post">
+  <div class="container"> <!--Stylize root div with .container class -->
+    {% csrf_token %}
+    <h1>Sign Up</h1>
+    <hr>
+    <div class=""> <!--Stylize second div with .form-group class -->
+        <label for="username"><b>User Name: </b></label>
+        <input type="text" class="form-control" placeholder="Enter User Name: " name="username" required> <!--Stylize input with .form-control class -->
+        
+        <label for="firstname"><b>First Name: </b></label>
+        <input type="text" class="form-control" placeholder="Enter First Name: " name="firstname" required> <!--Stylize input with .form-control class -->
+        
+        <label for="lastname"><b>Last Name: </b></label>
+        <input type="text" class="form-control placeholder="Enter Last Name: " name="lastname" required> <!--Stylize input with .form-control class -->
+        
+        <label for="psw"><b>Password: </b></label>
+        <input type="password" class="form-control" placeholder="Enter Password: " name="psw" required> <!--Stylize input with .form-control class -->
+        {% if message %}
+        <div class="alert alert-warning"> <!--Stylize the message paragraph with .alert and .alert-warning class -->
+            {{ message }}
+        </div>
+        {% endif %}
+        <button class="btn btn-primary" type="submit">Sign up</button> <!--Stylize button with .btn and .btn-primary class -->
+    </div>
+  </div>
+</form>
+
+</body>

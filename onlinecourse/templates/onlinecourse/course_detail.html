@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     {% load static %}
+     <!--Here we used maxcdn CDN (Content Distribution Network)
+    for delivering bootstrap.min.css file to our templates. -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+</head>
+
+<body>
+<!-- Add a Navigation bar -->
+<nav class="navbar navbar-light bg-light">
+    <div class='container-fluid'>
+        <div clss='navbar-header'>
+            <a class='navbar-brand' href="{% url 'onlinecourse:popular_course_list' %}">Online Course</a>
+         </div>
+
+        <ul class="nav navbar-nav navbar-right">
+        {% if user.is_authenticated %}
+            <li>
+                <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
+                <a class="btn btn-link" href="{% url 'onlinecourse:logout' %}">Logout</a>
+            </li>
+            {% else %}
+            <li>
+                <form class="form-inline" action="{% url 'onlinecourse:login' %}" method="post">
+            {% csrf_token %}
+                    <div class="input-group">
+                        <input type="text" placeholder="Username" name="username" class="form-control">
+                        <input type="password" placeholder="Username" name="psw" class="form-control">
+                        <button type="submit" class="btn btn-primary">Login</button>
+                        <a href="{% url 'onlinecourse:registration' %}" class="btn btn-link">Sign Up</a>
+                    </div>
+                </form>
+            </li>
+             {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<div class="container"> <!--Stylize the root div with .container class -->
+    <h2>{{ course.name }}</h2>
+    <div class="card-columns-vertical"> <!--Stylize the second level card columns div with .card-columns-vertical class-->
+        {% for lesson in course.lesson_set.all %}
+        <div class="card"> <!--Stylize the third level lesson div with .card class-->
+            <div class="card-header">Lesson {{lesson.order|add:1}}: {{lesson.title}}</div> <!--Stylize the fourth level lesson header  div with .card-header class-->
+            <div class="card-body">{{lesson.content}}</div>  <!--Stylize the fifth level lesson content div with .card-body class-->
+        </div>
+        {% endfor %}
+    </div>
+</div>
+</body>
+
+</html>
